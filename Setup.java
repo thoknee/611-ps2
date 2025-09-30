@@ -1,6 +1,6 @@
 // This class will exist as an introduction class. 
 // It will welcome the player and get the necessary information needed for the game.
-import java.util.Scanner;
+// import java.util.Scanner;
 public class Setup {
 
     public Config intro(Input p, Config cfg) {

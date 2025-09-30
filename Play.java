@@ -1,11 +1,8 @@
-import java.util.Arrays;
+// import java.util.Arrays;
 import java.util.Scanner;
 
 public class Play {
     
-    // Stores the amount of moves
-    private int moves = 0;
-
     private final Scanner sc;
     private final Input p;
 
@@ -22,27 +19,29 @@ public class Play {
 
         do {
             Config cfg = new Config();
-            cfg = setup.intro(p, cfg);       // prompts game, players, rows/cols, difficulty (if Sliding)
+            cfg = setup.intro(p, cfg);
 
             switch (cfg.getGameType()) {
                 case SLIDING:
                     runSliding(cfg);
                     break;
                 case DOTS_AND_BOXES:
-                    // runDotsAndBoxes(cfg);    // stub for now
+                    // runDotsAndBoxes(cfg);
                     break;
             }
 
             again = p.intInRange("Play again? (1=yes, 0=no): ", 0, 1) == 1;
         } while (again);
     }
-        private void runSliding(Config cfg) {
-        Board board = new Board(cfg);              // Board(config) as you had
-        SlidingGame game = new SlidingGame(board); // same constructor
+    
+    
+    private void runSliding(Config cfg) {
+        Board board = new Board(cfg);
+        SlidingGame game = new SlidingGame(board);
         game.initializeWin();
         game.shuffleBoard(cfg.getDifficulty());
 
-        System.out.println(board.displayBoard(board.getBoard()));  // requires displayBoard() no-arg
+        System.out.println(board.displayBoard(board.getBoard()));
         int moves = 0;
 
         while (true) {
@@ -58,7 +57,6 @@ public class Play {
             System.out.println(board.displayBoard(board.getBoard()));
             moves++;
 
-            // Win check (keeps your old approach)
             if (game.isSolved()) {
                 Player p0 = cfg.getPlayer(0);
                 if (p0 != null) p0.incrementWins();
