@@ -9,11 +9,6 @@ public class Config {
     private int difficulty;
 
     public Config(){
-        // this.playerName = ""playerName"";
-        // this.gameType = gameType;
-        // this.rows = rows;
-        // this.columns = columns;
-        // this.difficulty = difficulty;
     }
 
     // stores important information given to us by the player.

@@ -52,7 +52,6 @@ public boolean isSolved() {
     }
     return true;
 }
-
     // Translates the value moved into a cardinal direction that works easier with the move function
     public int findMove(int value){
         if(this.blankRow == 0){
