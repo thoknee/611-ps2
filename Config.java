@@ -1,5 +1,11 @@
-// import java.util.ArrayList;
-// import java.util.List;
+/*
+ * 
+ *  This holds the came configuration aka things about the game 
+ *  Includes:
+ *  type of game, list of players, rows/columns of board, and difficulty if applicable
+ * 
+ *  Written by Tony Ponomarev and Olivia Ma
+ */
 
 public class Config {
     private GameType gameType;

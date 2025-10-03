@@ -1,4 +1,11 @@
-// This has all the logic behind the sliding game. It builds on the Board method
+/*
+ * 
+ *  Handles all logic (initizlization, moves, and win) for sliding game 
+ * 
+ * 
+ *  Written by Tony Ponomarev and Olivia ma
+ *  
+ */
 
 import java.util.Random;
 
@@ -7,173 +14,152 @@ public class SlidingGame extends Game{
     // Needed for this specific game
     private int blankRow;
     private int blankColumn;
+    private int moves = 0;
     
     
     public SlidingGame(Board board){
         super(board);
-        int rows = this.board.getRows();
-        int columns = this.board.getColumns();
+        int rows = board.getRows();
+        int cols  = board.getColumns();
 
-        // Fills empty board
-        int count = 1;
-        for(int i = 0; i < this.board.getBoard().length;i++){
-            for (int j = 0;j< this.board.getBoard()[0].length; j++){
-                this.board.getBoard()[i][j] = count;
-                count++;
+        int v = 1;
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                board.setPiece(r, c, new NumberPiece(v++));
             }
         }
 
-        this.board.getBoard()[rows-1][columns-1] = -1;
-        this.blankRow = rows-1;
-        this.blankColumn = columns - 1;
+        board.setPiece(rows - 1, cols - 1, null);
+        this.blankRow = rows - 1;
+        this.blankColumn = cols - 1;
+        this.moves = 0;
+    }
+
+
+    public int getMoves(){
+        return this.moves;
     }
 
     // Gets the winning state we compare with/
     public void initializeWin(){
-        this.winningState = new int[this.board.getRows()][this.board.getColumns()];
-        for(int i = 0; i < this.board.getRows(); i ++){
-            for(int j = 0; j < this.board.getColumns();j ++){
-                this.winningState[i][j] = this.board.getBoard()[i][j];
-            }
+        int rows = board.getRows();
+        int cols = board.getColumns();
+        int v = 1;
+        for (int r=0;r<rows;r++)
+            for (int c=0;c<cols;c++)
+                board.setPiece(r, c, new NumberPiece(v++));
+        board.clear(rows-1, cols-1);
+        
+        blankRow = rows-1; 
+        blankColumn = cols-1;
     }
-}
+
+
 
 public boolean isSolved() {
-    int rows = board.getRows(), cols = board.getColumns();
-    int expect = 1;
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            if (i == rows - 1 && j == cols - 1) {
-                if (board.getBoard()[i][j] != -1) return false;
+     int rows = board.getRows();
+    int cols  = board.getColumns();
+
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < cols; c++) {
+            Piece p = board.getPiece(r, c);
+            boolean isLastCell = (r == rows - 1) && (c == cols - 1);
+
+            if (isLastCell) {
+                if (p != null) {
+                return false;
+                }
             } else {
-                if (board.getBoard()[i][j] != expect++) return false;
+                if (!(p instanceof NumberPiece)) {
+                    return false;
+                }
+                int expect = r * cols + c + 1;
+                if (((NumberPiece) p).getValue() != expect) {
+                    return false;
+                }
             }
         }
     }
     return true;
 }
+
+private boolean isValueAt(int r, int c, int value) {
+    Piece p = board.getPiece(r, c);
+    return (p instanceof NumberPiece) && ((NumberPiece) p).getValue() == value;
+}
+
     // Translates the value moved into a cardinal direction that works easier with the move function
     public int findMove(int value){
-        if(this.blankRow == 0){
-        }
-        else if(this.board.getBoard()[this.blankRow - 1][this.blankColumn] == value){
+        int r = blankRow, c = blankColumn;
+        int rows = board.getRows(), cols = board.getColumns();
+
+
+        if (r > 0 && isValueAt(r - 1, c, value)) {
             return 1;
         }
 
-        if(this.blankColumn == this.board.getBoard()[0].length - 1){
-
-        }
-        else if(this.board.getBoard()[this.blankRow][this.blankColumn + 1] == value){
+        if (c < cols - 1 && isValueAt(r, c + 1, value)){
             return 2;
         }
 
-        if(this.blankRow == this.board.getBoard().length - 1){
-
-        }
-         else if(this.board.getBoard()[this.blankRow + 1][this.blankColumn] == value){
+        if (r < rows - 1 && isValueAt(r + 1, c, value)) {
             return 3;
         }
 
-        if(this.blankColumn == 0){
-
-        }
-        else if(this.board.getBoard()[this.blankRow][this.blankColumn - 1] == value){
+        if (c > 0 && isValueAt(r, c - 1, value)) {
             return 4;
         }
-            return -1;
+
+        return -1;
         
     }
 
     // Checks to make sure the move is valid
     public boolean validMove(int direction){
-        // Up
-        if(direction == 1){
-            
-            if(this.blankRow == 0){
+        switch (direction) {
+            // Up
+            case 1: 
+                return blankRow > 0;
+            // Right
+            case 2: 
+                return blankColumn < board.getColumns() - 1;
+            // Down
+            case 3: 
+                return blankRow < board.getRows() - 1;
+            // left
+            case 4: 
+                return blankColumn > 0;
+            default: 
                 return false;
-            }
-            else{
-                return true;
-            }
-        }
-        // Down
-        if(direction == 3){
-            
-            if(this.blankRow == this.board.getBoard().length -1){
-                return false;
-            }
-            else{
-                return true;
-            }
-        }
-        //Right
-        if(direction == 2){
-            
-            if(this.blankColumn == this.board.getBoard()[0].length -1){
-                return false;
-            }
-            else{
-                return true;
-            }
-        }
-        //Left
-        if(direction == 4){
-            
-            if(this.blankColumn == 0){
-                return false;
-            }
-            else{
-                return true;
-            }
-        }
-
-        return false;
-
     }
-
+    }
 
     // Makes the move (switches spaces on the baord.)
     public boolean makeMove(int direction){
-        int temp = 0;
-        if(direction == 1){
-            temp = this.board.getBoard()[this.blankRow - 1][this.blankColumn];
+        this.moves ++;
+        
+        if (validMove(direction)){
 
-            this.board.getBoard()[this.blankRow - 1][this.blankColumn] = -1;
-            this.board.getBoard()[this.blankRow][this.blankColumn] = temp;
-
-            this.blankRow--;
-            return true;
+            switch(direction){
+            case 1:
+                board.swapPiece(blankRow, blankColumn, blankRow-1, blankColumn);
+                this.blankRow--;
+                return true;
+            case 2:
+                board.swapPiece(blankRow, blankColumn, blankRow, blankColumn + 1);
+                this.blankColumn++;
+                return true;
+            case 3:
+                board.swapPiece(blankRow, blankColumn, blankRow + 1, blankColumn);
+                this.blankRow++;
+                return true;
+            case 4:
+                board.swapPiece(blankRow, blankColumn, blankRow, blankColumn - 1);
+                this.blankColumn--;
+                return true;
+            }
         }
-        else if(direction == 2){
-            temp = this.board.getBoard()[this.blankRow][this.blankColumn + 1];
-
-            this.board.getBoard()[this.blankRow][this.blankColumn + 1] = -1;
-            this.board.getBoard()[this.blankRow][this.blankColumn] = temp;
-
-            this.blankColumn++;
-            return true;
-        }
-        else if(direction == 3){
-            temp = this.board.getBoard()[this.blankRow + 1][this.blankColumn];
-
-            this.board.getBoard()[this.blankRow + 1][this.blankColumn] = -1;
-            this.board.getBoard()[this.blankRow][this.blankColumn] = temp;
-
-            this.blankRow++;
-            return true;
-        }
-        else if(direction == 4){
-            temp = this.board.getBoard()[this.blankRow][this.blankColumn - 1];
-
-            this.board.getBoard()[this.blankRow][this.blankColumn - 1] = -1;
-            this.board.getBoard()[this.blankRow][this.blankColumn] = temp;
-
-            this.blankColumn--;
-            return true;
-        }
-        else{
-            return false;
-        }
+        return false;
 
     }
 

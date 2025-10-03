@@ -1,8 +1,14 @@
-// Abstract Game class
+/*
+ * 
+ *  Abstract game class that we can extend for any game.
+ * 
+ *  Written by Tony Ponomarev and Olivia Ma
+ * 
+ * 
+ */
 
 public abstract class Game {
     public Board board;
-    public int[][] winningState;
 
 
     public Game(Board board){
@@ -11,9 +17,6 @@ public abstract class Game {
 
     public Board getBoard(){
         return this.board;
-    }
-    public int[][] getWin(){
-        return this.winningState;
     }
 
 }

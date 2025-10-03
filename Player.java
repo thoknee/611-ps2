@@ -1,3 +1,11 @@
+/*
+ * 
+ *  Player class that can hold how many wins they have and name (might need playerId?)
+ * 
+ *  Written by Tony Ponomarev and Olivia Ma
+ * 
+ */
+
 public class Player {
     
 

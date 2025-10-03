@@ -1,6 +1,22 @@
+/*
+ * 
+ *  This provides methods to make sure inputs from the user are valid
+ *  We can check the following:
+ *  - Make sure they input an actua line
+ *  - Integer
+ *  - Integer greater than some value
+ *  - Integer in a range 
+ * 
+ * 
+ * 
+ *  Written by Tony Ponomarev and Olivia Ma
+ */
+
+
+
 import java.util.Scanner;
 
-public class ConsoleInput implements Input{
+public class ConsoleInput{
     private final Scanner sc;
 
     public ConsoleInput(Scanner sc) { 
