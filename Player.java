@@ -10,6 +10,7 @@ public class Player {
     
 
     private final String name;
+    private int score;
     private int wins;
 
 
@@ -24,8 +25,16 @@ public class Player {
     public int getWins() { 
         return wins; 
     }
+    public int getScore(){
+        return this.score;
+    }
 
     public void incrementWins(){
         this.wins++;
     }
+    public void incrementScore(){
+        this.score++;
+    }
+    
+
 }

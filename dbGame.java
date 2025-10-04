@@ -78,6 +78,7 @@ public class dbGame extends Game{
         // claim now
         if (p.claimedEdgeCount() == 4) {
             p.setBoxOwner(player);
+            player.incrementScore();
             return 1;
         }
 
@@ -132,8 +133,15 @@ public class dbGame extends Game{
     }
 
     // NEEDS IMPLENTATION
-    public int[] getScores() {
-        return new int[2];
+    public int[] getScores(Config cfg) {
+        
+
+        int [] scores = new int[cfg.getPlayers().length];
+        
+        for(int i = 0; i < cfg.getPlayers().length; i++){
+            scores[i] = cfg.getPlayers()[i].getScore();
+        }
+        return scores;
     }
 }
 
