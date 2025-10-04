@@ -16,6 +16,8 @@ public class dbPiece implements Piece{
     private final Player[] edgeOwners;
     // hold which player owns this dot/boxes piece
     private Player boxOwner;
+    // An id field that we use to display.
+    private int boxId;
 
     public dbPiece() {
         this.edgeOwners = new Player[4];
@@ -32,6 +34,13 @@ public class dbPiece implements Piece{
     @Override
     public boolean isBox() {
         return true;
+    }
+
+    public void setBoxId(int id) { 
+        this.boxId = id; 
+    }
+    public int getBoxId() { 
+        return boxId; 
     }
 
     public boolean isEdgeClaimed(Edge e) {

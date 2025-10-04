@@ -28,13 +28,14 @@ public class Play {
             cfg = setup.intro(p, cfg);
 
             RunGame runSlide = new RunSliding();
+            RunDotsAndBoxes rundb = new RunDotsAndBoxes();
 
             switch (cfg.getGameType()) {
                 case SLIDING:
                     runSlide.runGame(cfg, p);
                     break;
                 case DOTS_AND_BOXES:
-                    // runDotsAndBoxes(cfg);
+                    rundb.runGame(cfg, p);
                     break;
             }
 

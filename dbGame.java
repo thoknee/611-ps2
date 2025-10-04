@@ -15,18 +15,34 @@ public class dbGame extends Game{
         // every tile has a dbPiece (box)
         int rows = board.getRows();
         int cols = board.getColumns();
+        int id = 1;
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
-                Piece p = board.getPiece(r, c);
-                if (!p.isBox()) {
-                    board.setPiece(r, c, new dbPiece());
-                }
+                Piece p = new dbPiece();
+
+                board.setPiece(r, c, p);
+                ((dbPiece) p).setBoxId(id++);
             }
         }
     }
 
-    public boolean claimEdge(int r, int c, Edge e, Player player) {
+
+
+    public boolean claimEdge(int boxId, Edge e, Player player) {
         // validate indices
+        
+        //Turn id into valid rows/columns so we can access array
+        int rows = board.getRows();
+        int cols = board.getColumns();
+        if (boxId < 1 || boxId > rows * cols) {
+            return false;
+        }
+
+        int idx = boxId - 1;
+        int r = idx / cols;
+        int c = idx % cols;
+
+
         if (r < 0 || r >= board.getRows() || c < 0 || c >= board.getColumns()) {
             throw new IndexOutOfBoundsException("Box coordinates are out of range.");
         }

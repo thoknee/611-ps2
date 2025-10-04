@@ -9,8 +9,14 @@
  */
 
 public class RunDotsAndBoxes {
-    public void runDotsAndBoxes(Config cfg, ConsoleInput p) {
+    public void runGame(Config cfg, ConsoleInput p) {
+        
+        
+        Board board = new Board(cfg);
+        dbGame game = new dbGame(board);
 
+        Display<Board> view = new dbDisplay();
+        System.out.println(view.display(board));        
 
         
      }
