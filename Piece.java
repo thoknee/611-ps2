@@ -12,4 +12,6 @@ public interface Piece {
     
     boolean isBlank();
 
+    boolean isBox();
+
 }

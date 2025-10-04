@@ -29,6 +29,11 @@ public class dbPiece implements Piece{
          return false;
     }
 
+    @Override
+    public boolean isBox() {
+        return true;
+    }
+
     public boolean isEdgeClaimed(Edge e) {
         return edgeOwners[e.getIndex()] != null;
     }

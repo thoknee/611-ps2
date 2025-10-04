@@ -22,4 +22,9 @@ public class NumberPiece implements Piece{
     public boolean isBlank() { 
         return false; 
     }
+
+    @Override
+    public boolean isBox() {
+        return false;
+    }
 }

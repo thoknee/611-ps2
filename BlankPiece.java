@@ -14,4 +14,8 @@ public class BlankPiece implements Piece{
     public boolean isBlank() { 
         return true; 
     }
+    @Override
+    public boolean isBox() {
+        return true;
+    }
 }
