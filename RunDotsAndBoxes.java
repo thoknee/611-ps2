@@ -11,7 +11,7 @@
 public class RunDotsAndBoxes {
     public void runGame(Config cfg, ConsoleInput p) {
         
-        
+        // Sets everything up
         Board board = new Board(cfg);
         dbGame game = new dbGame(board);
 
@@ -20,44 +20,93 @@ public class RunDotsAndBoxes {
         
         int rows = board.getRows();
         int cols = board.getColumns();
+        
+        // Keeps track of turn
         int currentTurn = 0;
 
+
+        // Actual game loop
         while(!game.isGameOver()){
             
-       
-
+            // gets the current player
             Player curPlayer = cfg.getPlayers()[currentTurn];
 
-            String boxPrompt = "Welcome " + curPlayer.getName() + "! It is your turn, which box would you like to select?";
-            int box = p.intInRange(boxPrompt, 1, (rows-1)*(cols-1));
-            
-            int idx = box - 1;
-            int r = idx / cols;
-            int c = idx % cols;
+            //Prints out helpful information about scores
+            System.out.println("Scores: " + cfg.getPlayers()[0].getName() + "=" + cfg.getPlayers()[0].getScore()
+                     + " | " + cfg.getPlayers()[1].getName() + "=" + cfg.getPlayers()[1].getScore());
+            System.out.println("Turn: " + curPlayer.getName());
+
+            boolean moveMade = false;
+
+            // Turn loop
+            while(!moveMade){
+                
+                // Prompts for the box to select.
+                String boxPrompt = "Welcome " + curPlayer.getName() + "! It is your turn, which box would you like to select?";
+                int box = p.intInRange(boxPrompt, 1, (rows)*(cols));
+                
+                int idx = box - 1;
+                int r = idx / cols;
+                int c = idx % cols;
+                
+                // All unclaimed edges for a box
+                java.util.List <Integer> open = game.unclaimedEdgesForBox(box);
+
+                // Makes sure there is a valid move, if not we try again
+                if(open.isEmpty()){
+                    System.out.println("That box has no available edges. Pick another box.");
+                    continue;
+                }
 
 
-            Piece curPiece = board.getPiece(r, c);
-            
-            String edgePrompt = "Good choice! Which edge would you like? (1 = top, 2 = right, 3 = bottom, 4 = left)";
-            
-            
-            
-            String edgePrompt2 = "Your choices are: " + game.unclaimedEdgesForBox(box).toString();
-            
-            Edge edge = p.edgeClaimed(edgePrompt + edgePrompt2, (dbPiece) curPiece);
+                // Makes sure we get a valid edge.
+                while(true){
+                    
+                    // Shows valid edges
+                    System.out.println("Open edges for box " + box + ": " + open + "  (1=TOP,2=RIGHT,3=BOTTOM,4=LEFT)");
+                    //Gets edge number
+                    int edgeNum = p.intInRange("Pick an edge (or 0 to choose a different box): ", 0, 4);
 
-            game.claimEdge(box, edge, curPlayer);
-            System.out.println(view.display(board));
+                    // If 0, we prompt for box
+                    if (edgeNum == 0) {
+                        break;
+                    }
+                    if (!open.contains(edgeNum)) {
+                        System.out.println("That edge isn't available on this box. Try again.");
+                        continue;
+                    }
 
-            if(game.resolveCompletedBoxes(r,c,curPlayer) == 1){
-                continue;
+
+                    Edge e = Edge.fromInt(edgeNum);
+                    boolean edgeClaimed = game.claimEdge(box, e, curPlayer);
+
+                    // Makes sure it isn't claimed
+                    if (!edgeClaimed) {
+                        System.out.println("Edge already taken. Try another edge.");
+                        open = game.unclaimedEdgesForBox(box);
+                        if (open.isEmpty()) {
+                            System.out.println("No edges left on this box. Choose a different box.");
+                            break;
+                        }
+                        continue;
+                    }
+
+                    // Check to see if box is completed
+                    int gained = game.resolveCompletedBoxes(r, c, curPlayer);
+                    System.out.println(view.display(board));
+
+                    // Checks for current turn. If scored, then we add points.
+                    if (gained == 0) {
+                        currentTurn = (currentTurn + 1) % cfg.getPlayers().length;
+                    } else {
+                        System.out.println(curPlayer.getName() + " completed " + gained + " box"
+                                        + (gained == 1 ? "" : "es") + ". You get another turn!");
+                    }
+
+                    moveMade = true;
+                    break;
+                }
             }
-            else if(game.resolveCompletedBoxes(r,c,curPlayer) == 0){
-                currentTurn = (currentTurn + 1) % 2;
-            }
-
         }
-
-        
      }
 }
