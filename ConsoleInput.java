@@ -64,4 +64,17 @@ public class ConsoleInput{
             System.out.println("Please enter a value >= " + lo + ".");
         }
     }
+
+    public Edge edgeClaimed(String prompt,dbPiece p ){
+        while(true){
+            int d = (intInRange(prompt, 1, 4));
+            Edge e = Edge.fromInt(d);
+            if(!p.isEdgeClaimed(e)){
+                return e;
+            }
+            else{
+                System.out.println("Please enter a valid edge number");
+            }
+        }
+    }
 }

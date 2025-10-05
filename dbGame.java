@@ -159,6 +159,34 @@ public class dbGame extends Game{
         }
         return scores;
     }
+
+    public java.util.List<Integer> unclaimedEdgesForBox(int boxId) {
+        int rows = board.getRows();
+        int cols = board.getColumns();
+        java.util.List<Integer> out = new java.util.ArrayList<>(4);
+        
+        if (boxId < 1 || boxId > rows * cols) {
+            return out;
+        }
+        int idx = boxId - 1;
+        int r = idx / cols;
+        int c = idx % cols;
+        dbPiece p = (dbPiece) board.getPiece(r, c);
+        
+        if (!p.isEdgeClaimed(Edge.TOP)){
+            out.add(1);
+        }
+        if (!p.isEdgeClaimed(Edge.RIGHT)){
+            out.add(2);
+        }
+        if (!p.isEdgeClaimed(Edge.BOTTOM)){
+            out.add(3);
+        }
+        if (!p.isEdgeClaimed(Edge.LEFT)){
+            out.add(4);
+        }
+        return out;
+}
 }
 
     

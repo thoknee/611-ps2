@@ -52,7 +52,7 @@ public class dbDisplay implements Display<Board>{
                 if (p.isBoxClaimed()) {
                     String nm = p.getBoxOwner().getName();
                     char ch = (nm != null && !nm.isEmpty()) ? Character.toUpperCase(nm.charAt(0)) : '?';
-                    cell = (String.valueOf(ch));
+                    cell = strRepeat(" ", w/2) + (String.valueOf(ch)) + strRepeat(" ", w/2);
                 } else {
                     cell = strRepeat(" ", w/2) + (String.valueOf(p.getBoxId())) + strRepeat(" ", w/2);
                 }
