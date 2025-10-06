@@ -15,7 +15,7 @@ public class RunDotsAndBoxes {
         Board board = new Board(cfg);
         dbGame game = new dbGame(board);
 
-        Display<Board> view = new dbDisplay();
+        Display<Board> view = new dbDisplay(cfg.getPlayers()[0], cfg.getPlayers()[1]);
         System.out.println(view.display(board));
         
         int rows = board.getRows();
