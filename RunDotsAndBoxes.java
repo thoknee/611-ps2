@@ -42,9 +42,15 @@ public class RunDotsAndBoxes {
             while(!moveMade){
                 
                 // Prompts for the box to select.
-                String boxPrompt = "Welcome " + curPlayer.getName() + "! It is your turn, which box would you like to select?";
-                int box = p.intInRange(boxPrompt, 1, (rows)*(cols));
+                String boxPrompt = curPlayer.getName() + ", it is your turn, which box would you like to select? (press 0 to quit): ";
+                int box = p.intInRange(boxPrompt, 0, (rows)*(cols));
                 
+                // exit back to Play.run()
+                if (box == 0) {
+                    System.out.println("You chose to quit the game. Returning to main menu...");
+                    return; 
+                }
+
                 int idx = box - 1;
                 int r = idx / cols;
                 int c = idx % cols;
@@ -65,12 +71,18 @@ public class RunDotsAndBoxes {
                     // Shows valid edges
                     System.out.println("Open edges for box " + box + ": " + open + "  (1=TOP,2=RIGHT,3=BOTTOM,4=LEFT)");
                     //Gets edge number
-                    int edgeNum = p.intInRange("Pick an edge (or 0 to choose a different box): ", 0, 4);
+                    int edgeNum = p.intInRange("Pick an edge, 0 to choose a different box, or -1 to quit the game: ", -1, 4);
+
+                    if (edgeNum == -1) {
+                        System.out.println("You chose to quit. Returning to main menu...");
+                        return;
+                    }
 
                     // If 0, we prompt for box
                     if (edgeNum == 0) {
                         break;
                     }
+
                     if (!open.contains(edgeNum)) {
                         System.out.println("That edge isn't available on this box. Try again.");
                         continue;

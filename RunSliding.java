@@ -18,8 +18,15 @@ public class RunSliding implements RunGame {
         System.out.println(view.display(board));
 
         while (true) {
-            int move = p.isInt("What number would you like to move to the empty square? ");
+            int move = p.intAtLeast("What number would you like to move to the empty square? (Press 0 to quit): ", 0);
 
+            // if player wants to quit mid-game
+            // goes back to Play.run()
+            if (move == 0) {
+                System.out.println("You chose to quit. Returning to main menu...");
+                return; 
+            }
+            
             int direction = game.findMove(move);
             if (direction == -1 || !game.validMove(direction)) {
                 System.out.println("That is not a possible move right now.");

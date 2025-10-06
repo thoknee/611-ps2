@@ -39,7 +39,7 @@ public class Play {
                     break;
             }
 
-            again = p.intInRange("Would you like to play again? 0 = No, 1 = yes", 0, 1) == 1;
+            again = p.intInRange("Would you like to keep playing games? 0 = No, 1 = Yes: ", 0, 1) == 1;
         } while (again);
     }
 }
