@@ -12,7 +12,7 @@ public class Setup {
 
     public Config intro(ConsoleInput p, Config cfg) {
             
-        System.out.println("Welcome! What game would you like to play?\n Enter 1 for sliding game and 2 for dots and boxes.");
+        System.out.println("Welcome! What game would you like to play?\nEnter 1 for sliding game and 2 for dots and boxes.");
         int choice = p.intInRange("Enter 1 or 2: ", 1, 2);
         
 
@@ -25,7 +25,30 @@ public class Setup {
         }
 
         for (int i = 0; i < cfg.playerCount(); i++) {
-            cfg.setPlayer(i, new Player(p.isLine("What is player " + (i + 1) + "'s' name? ")));
+            while (true) {
+                String name = p.isLine("What is player " + (i + 1) + "'s' name? ").trim();
+                
+                // reject empty names or just spaces
+                if (name.isEmpty()) {
+                    System.out.println("Name cannot be empty or just spaces.");
+                    continue;
+                }
+                
+                // check for duplicate names, not allowed
+                boolean duplicate = false;
+                for (int j = 0; j < i; j++) {
+                    Player existing = cfg.getPlayer(j);
+                    if (existing != null && existing.getName().equalsIgnoreCase(name)) {
+                        System.out.println("That name is already taken.");
+                        duplicate = true;
+                        break;
+                    }
+                }
+                if (duplicate) continue;
+
+                cfg.setPlayer(i, new Player(name));
+                break;
+            }           
         }
 
         cfg.setRows(p.intAtLeast("How many rows do you want? (must be 2 or more)): ", 2));
